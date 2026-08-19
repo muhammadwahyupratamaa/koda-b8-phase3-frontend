@@ -13,12 +13,13 @@ function Navbar({ variant = "landing" }) {
     },
     {
       name: "Links",
-      path: "/links",
+      path: "/create-link",
     },
   ];
 
   const isLanding = variant === "landing";
   const isDashboard = variant === "dashboard";
+  const isProfile = variant === "profile";
 
   return (
     <nav className="border-b border-gray-100 bg-white">
@@ -75,6 +76,15 @@ function Navbar({ variant = "landing" }) {
                   className="rounded-md bg-blue-600 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-blue-700"
                 >
                   + Create New Link
+                </Link>
+              )}
+
+              {isProfile && (
+                <Link
+                  to="/profile"
+                  className="flex items-center gap-1.5 rounded-md bg-blue-50 px-3 py-2 text-xs font-semibold text-blue-600"
+                >
+                  Profile
                 </Link>
               )}
 
