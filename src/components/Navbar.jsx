@@ -1,4 +1,4 @@
-import { Link, NavLink } from "react-router-dom";
+import { Link, NavLink, useNavigate } from "react-router-dom";
 import { LuChevronDown } from "react-icons/lu";
 
 function Navbar({ variant = "landing" }) {
@@ -20,6 +20,12 @@ function Navbar({ variant = "landing" }) {
   const isLanding = variant === "landing";
   const isDashboard = variant === "dashboard";
   const isProfile = variant === "profile";
+  const navigate = useNavigate();
+
+  const handleLogout = async () => {
+    localStorage.removeItem("token");
+    navigate("/login");
+  };
 
   return (
     <nav className="border-b border-gray-100 bg-white">
@@ -63,6 +69,7 @@ function Navbar({ variant = "landing" }) {
 
               <button
                 type="button"
+                onClick={handleLogout}
                 className="rounded-md bg-blue-600 px-5 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-blue-700"
               >
                 Logout
@@ -89,9 +96,9 @@ function Navbar({ variant = "landing" }) {
               )}
 
               <div className="flex items-center gap-2">
-                <div className="flex h-8 w-8 items-center justify-center rounded-full bg-slate-700 text-xs font-semibold text-white">
+                <Link to="/profile" className="flex h-8 w-8 items-center justify-center rounded-full bg-slate-700 text-xs font-semibold text-white">
                   W
-                </div>
+                </Link>
 
                 {isDashboard && (
                   <button
@@ -105,6 +112,7 @@ function Navbar({ variant = "landing" }) {
 
               <button
                 type="button"
+                onClick={handleLogout}
                 className="text-sm font-medium text-gray-500 hover:text-gray-900"
               >
                 Logout

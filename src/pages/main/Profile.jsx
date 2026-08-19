@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import {
   LuBell,
   LuLink,
@@ -12,6 +12,8 @@ import Footer from "../../components/Footer";
 import { useEffect, useState } from "react";
 
 function Profile() {
+  const navigate = useNavigate();
+
   const user = {
     name: "Alex Thompson",
     email: "user@example.com",
@@ -40,6 +42,10 @@ function Profile() {
     }
     getLinks();
   }, []);
+
+  const handleLogout = () => {
+    (localStorage.removeItem("token"), navigate("/login"));
+  };
 
   return (
     <main className="min-h-screen bg-slate-50">
@@ -129,6 +135,7 @@ function Profile() {
 
             <button
               type="button"
+              onClick={handleLogout}
               className="mt-5 flex w-full items-center justify-center gap-2 rounded-md border border-gray-200 bg-slate-50 py-3 text-xs font-medium text-slate-600 transition hover:bg-slate-100"
             >
               <LuLogOut className="h-3.5 w-3.5" />
