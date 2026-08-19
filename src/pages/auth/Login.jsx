@@ -45,6 +45,7 @@ function Login() {
       }
 
       localStorage.setItem("token", result.token);
+      navigate("/");
 
       // console.log("Token:", result.token);
       // console.log("Saved token:", localStorage.getItem("token"));
