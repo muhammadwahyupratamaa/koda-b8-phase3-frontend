@@ -1,7 +1,6 @@
 import {
   LuCalendarDays,
   LuClipboard,
-  LuFilter,
   LuSearch,
   LuTrash2,
 } from "react-icons/lu";
@@ -13,12 +12,17 @@ import { useEffect, useState } from "react";
 
 function Dashboard() {
   const [links, setLinks] = useState([]);
+  const [search, setSearch] = useState("");
 
   useEffect(() => {
     async function getLinks() {
       const token = localStorage.getItem("token");
 
-      const response = await fetch("http://localhost:8082/api/links", {
+      const url = search.trim()
+        ? `http://localhost:8082/api/links?search=${encodeURIComponent(search)}`
+        : "http://localhost:8082/api/links";
+
+      const response = await fetch(url, {
         method: "GET",
         headers: {
           Authorization: `Bearer ${token}`,
@@ -27,11 +31,15 @@ function Dashboard() {
 
       const result = await response.json();
 
+      if (!response.ok) {
+        return console.error(result.message);
+      }
+
       setLinks(result.data);
     }
 
     getLinks();
-  }, []);
+  }, [search]);
 
   const handleDelete = async (id) => {
     const token = localStorage.getItem("token");
@@ -50,10 +58,10 @@ function Dashboard() {
   };
 
   return (
-    <main className="min-h-screen bg-slate-50">
+    <main className="flex min-h-screen flex-col bg-slate-50">
       <Navbar variant="dashboard" />
 
-      <section className="px-6 py-8 sm:px-8 lg:px-10">
+      <section className="flex-1 px-6 py-8 sm:px-8 lg:px-10">
         <div className="mx-auto max-w-3xl">
           <div className="flex flex-col justify-between gap-5 sm:flex-row sm:items-start">
             <div>
@@ -80,16 +88,11 @@ function Dashboard() {
 
             <input
               type="text"
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
               placeholder="Search by name or URL..."
               className="w-full bg-transparent px-3 py-3 text-sm text-gray-700 outline-none placeholder:text-gray-400"
             />
-
-            <button
-              type="button"
-              className="shrink-0 text-gray-500 transition hover:text-gray-900"
-            >
-              <LuFilter className="h-4 w-4" />
-            </button>
           </div>
 
           <div className="mt-7 space-y-3">
@@ -149,29 +152,6 @@ function Dashboard() {
                 </div>
               </div>
             ))}
-          </div>
-
-          <div className="mt-8 flex items-center justify-between text-xs font-medium text-slate-500">
-            <button type="button" className="transition hover:text-gray-900">
-              ‹ Prev Page
-            </button>
-
-            <div className="flex items-center gap-4">
-              <button
-                type="button"
-                className="flex h-7 w-7 items-center justify-center rounded-md bg-blue-100 font-semibold text-blue-600"
-              >
-                1
-              </button>
-
-              <span>of</span>
-
-              <span className="text-gray-900">5</span>
-            </div>
-
-            <button type="button" className="transition hover:text-gray-900">
-              Next ›
-            </button>
           </div>
         </div>
       </section>
