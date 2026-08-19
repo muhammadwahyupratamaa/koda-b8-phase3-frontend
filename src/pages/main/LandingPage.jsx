@@ -44,7 +44,7 @@ function LandingPage() {
 
   return (
     <main className="min-h-screen bg-slate-50">
-      <Navbar />
+      <Navbar variant="landing" />
 
       <section className="flex min-h-[520px] items-center justify-center px-6 py-20">
         <div className="mx-auto flex w-full max-w-5xl flex-col items-center text-center">
