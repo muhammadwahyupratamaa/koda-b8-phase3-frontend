@@ -1,10 +1,10 @@
-import React from "react";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Login from "./pages/auth/Login";
 import Register from "./pages/auth/Register";
 import LandingPage from "./pages/main/LandingPage";
 import Dashboard from "./pages/main/Dasboard";
 import CreateLink from "./pages/main/CreateLink";
+import NotFound from "./pages/NotFound";
 
 const router = createBrowserRouter([
   // AUTH
@@ -29,6 +29,12 @@ const router = createBrowserRouter([
   {
     path: "/create-link",
     element: <CreateLink />,
+  },
+
+  // 404
+  {
+    path: "*",
+    element: <NotFound />,
   },
 ]);
 
