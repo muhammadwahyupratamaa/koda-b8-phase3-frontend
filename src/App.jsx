@@ -5,6 +5,7 @@ import LandingPage from "./pages/main/LandingPage";
 import Dashboard from "./pages/main/Dasboard";
 import CreateLink from "./pages/main/CreateLink";
 import NotFound from "./pages/NotFound";
+import Profile from "./pages/main/Profile";
 
 const router = createBrowserRouter([
   // AUTH
@@ -35,6 +36,10 @@ const router = createBrowserRouter([
   {
     path: "*",
     element: <NotFound />,
+  },
+  {
+    path: "/profile",
+    element: <Profile />,
   },
 ]);
 
