@@ -57,7 +57,7 @@ function CreateLink() {
   }
   return (
     <main className="min-h-screen bg-slate-50">
-      <Navbar variant="dashboard" />
+      <Navbar variant="create" />
 
       <section className="px-5 py-8 sm:px-8">
         <div className="mx-auto max-w-3xl">

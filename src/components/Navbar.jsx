@@ -18,6 +18,7 @@ function Navbar({ variant = "landing" }) {
   ];
 
   const isLanding = variant === "landing";
+  const isDashboard = variant === "dashboard";
 
   return (
     <nav className="border-b border-gray-100 bg-white">
@@ -68,17 +69,28 @@ function Navbar({ variant = "landing" }) {
             </>
           ) : (
             <>
+              {isDashboard && (
+                <Link
+                  to="/create-link"
+                  className="rounded-md bg-blue-600 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-blue-700"
+                >
+                  + Create New Link
+                </Link>
+              )}
+
               <div className="flex items-center gap-2">
                 <div className="flex h-8 w-8 items-center justify-center rounded-full bg-slate-700 text-xs font-semibold text-white">
                   W
                 </div>
 
-                <button
-                  type="button"
-                  className="text-gray-500 hover:text-gray-900"
-                >
-                  <LuChevronDown className="h-4 w-4" />
-                </button>
+                {isDashboard && (
+                  <button
+                    type="button"
+                    className="text-gray-500 hover:text-gray-900"
+                  >
+                    <LuChevronDown className="h-4 w-4" />
+                  </button>
+                )}
               </div>
 
               <button
