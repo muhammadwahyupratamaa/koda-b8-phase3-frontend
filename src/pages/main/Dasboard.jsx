@@ -14,20 +14,34 @@ function Dashboard() {
   const [links, setLinks] = useState([]);
   const [search, setSearch] = useState("");
 
+  const [page, setPage] = useState(1);
+  const [total, setTotal] = useState(0);
+  const [totalPages, setTotalPages] = useState(1);
+
+  const limit = 5;
+
   useEffect(() => {
     async function getLinks() {
       const token = localStorage.getItem("token");
 
-      const url = search.trim()
-        ? `http://localhost:8082/api/links?search=${encodeURIComponent(search)}`
-        : "http://localhost:8082/api/links";
-
-      const response = await fetch(url, {
-        method: "GET",
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
+      const params = new URLSearchParams({
+        page,
+        limit,
       });
+
+      if (search.trim()) {
+        params.set("search", search);
+      }
+
+      const response = await fetch(
+        `http://localhost:8082/api/links?${params.toString()}`,
+        {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        },
+      );
 
       const result = await response.json();
 
@@ -36,25 +50,34 @@ function Dashboard() {
       }
 
       setLinks(result.data);
+      setTotal(result.pagination.total);
+      setTotalPages(result.pagination.totalPages);
     }
 
     getLinks();
-  }, [search]);
+  }, [search, page]);
 
   const handleDelete = async (id) => {
     const token = localStorage.getItem("token");
+
     const response = await fetch(`http://localhost:8082/api/links/${id}`, {
       method: "DELETE",
       headers: {
         Authorization: `Bearer ${token}`,
       },
     });
+
     const result = await response.json();
 
     if (!response.ok) {
       return console.error(result.message);
     }
-    setLinks((currentLinks) => currentLinks.filter((link) => link.id !== id));
+
+    setLinks((currentLinks) =>
+      currentLinks.filter((link) => link.id !== id),
+    );
+
+    setTotal((currentTotal) => currentTotal - 1);
   };
 
   return (
@@ -65,7 +88,9 @@ function Dashboard() {
         <div className="mx-auto max-w-3xl">
           <div className="flex flex-col justify-between gap-5 sm:flex-row sm:items-start">
             <div>
-              <h1 className="text-2xl font-bold text-gray-900">My Links</h1>
+              <h1 className="text-2xl font-bold text-gray-900">
+                My Links
+              </h1>
 
               <p className="mt-1 text-sm text-gray-500">
                 Manage and track your shortened digital assets.
@@ -78,7 +103,7 @@ function Dashboard() {
               </p>
 
               <p className="mt-1 text-2xl font-bold text-blue-600">
-                {links.length}
+                {total}
               </p>
             </div>
           </div>
@@ -89,7 +114,10 @@ function Dashboard() {
             <input
               type="text"
               value={search}
-              onChange={(e) => setSearch(e.target.value)}
+              onChange={(e) => {
+                setSearch(e.target.value);
+                setPage(1);
+              }}
               placeholder="Search by name or URL..."
               className="w-full bg-transparent px-3 py-3 text-sm text-gray-700 outline-none placeholder:text-gray-400"
             />
@@ -118,16 +146,18 @@ function Dashboard() {
                     <div className="mt-2 flex items-center gap-3 text-xs font-medium tracking-wide text-slate-400">
                       <span className="flex items-center gap-1">
                         <LuCalendarDays className="h-3.5 w-3.5" />
-                        {new Date(link.created_at).toLocaleDateString("en-US", {
-                          month: "short",
-                          day: "numeric",
-                          year: "numeric",
-                        })}
+
+                        {new Date(link.created_at).toLocaleDateString(
+                          "en-US",
+                          {
+                            month: "short",
+                            day: "numeric",
+                            year: "numeric",
+                          },
+                        )}
                       </span>
 
                       <span>•</span>
-
-                      {/* <span>{link.clicks}</span> */}
                     </div>
                   </div>
 
@@ -153,6 +183,32 @@ function Dashboard() {
               </div>
             ))}
           </div>
+
+          {totalPages > 1 && (
+            <div className="mt-6 flex items-center justify-between">
+              <button
+                type="button"
+                disabled={page === 1}
+                onClick={() => setPage(page - 1)}
+                className="rounded-md border border-gray-200 bg-white px-4 py-2 text-sm font-medium text-gray-600 transition hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-40"
+              >
+                Previous
+              </button>
+
+              <p className="text-sm font-medium text-gray-500">
+                Page {page} of {totalPages}
+              </p>
+
+              <button
+                type="button"
+                disabled={page === totalPages}
+                onClick={() => setPage(page + 1)}
+                className="rounded-md border border-gray-200 bg-white px-4 py-2 text-sm font-medium text-gray-600 transition hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-40"
+              >
+                Next
+              </button>
+            </div>
+          )}
         </div>
       </section>
 
