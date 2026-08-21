@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { LuEye, LuEyeClosed } from "react-icons/lu";
 import { FaArrowRight } from "react-icons/fa";
+import toast from "react-hot-toast";
 
 function Login() {
   const navigate = useNavigate();
@@ -54,6 +55,8 @@ function Login() {
       }
 
       localStorage.setItem("token", result.token);
+      toast.success("login Success");
+
       navigate("/dashboard");
 
       // console.log("Token:", result.token);
@@ -94,13 +97,6 @@ function Login() {
           <div>
             <div className="mb-1 flex text-gray-600 items-center justify-between">
               <label className="text-sm font-medium">Password</label>
-
-              <Link
-                to="/forgot-password"
-                className="text-sm font-bold text-blue-600"
-              >
-                Forgot password?
-              </Link>
             </div>
 
             <div className="relative">

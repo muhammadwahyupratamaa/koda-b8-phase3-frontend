@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { LuEye, LuEyeClosed } from "react-icons/lu";
 import { FaArrowRight } from "react-icons/fa";
+import toast from "react-hot-toast";
 
 function Register() {
   const navigate = useNavigate();
@@ -60,10 +61,11 @@ function Register() {
         setError(result.message || "Registration failed");
         return;
       }
-
+      toast.success("Register Success");
       navigate("/login");
     } catch (error) {
-      setError("Something went wrong");
+      setError();
+      toast.error("Something went wrong");
     } finally {
       setLoading(false);
     }

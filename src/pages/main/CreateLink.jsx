@@ -13,6 +13,7 @@ import { IoMdLink } from "react-icons/io";
 import Navbar from "../../components/Navbar";
 import Footer from "../../components/Footer";
 import { useState } from "react";
+import toast from "react-hot-toast";
 
 function CreateLink() {
   const [destinationUrl, setDestinationUrl] = useState("");
@@ -36,7 +37,7 @@ function CreateLink() {
       setError("URL must use http or https");
       return;
     }
-    
+
     setLoading(true);
 
     try {
@@ -59,9 +60,11 @@ function CreateLink() {
       if (!response.ok) {
         return setError(result.message || "Failed to create link");
       }
+      toast.success("Create Link Success");
       navigate("/dashboard");
     } catch (error) {
-      setError("Something went wrong");
+      setError();
+      toast.error("Something went wrong");
     } finally {
       setLoading(false);
     }
