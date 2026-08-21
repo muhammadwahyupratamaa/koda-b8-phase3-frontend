@@ -25,6 +25,16 @@ function Register() {
       return;
     }
 
+    if (!/^\S+@\S+\.\S+$/.test(email)) {
+      setError("Invalid email format");
+      return;
+    }
+
+    if (password.length < 7) {
+      setError("Password must be at least 7 characters");
+      return;
+    }
+
     if (password !== confirmPassword) {
       setError("Passwords do not match");
       return;
