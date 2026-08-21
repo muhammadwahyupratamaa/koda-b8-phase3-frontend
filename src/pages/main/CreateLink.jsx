@@ -26,6 +26,17 @@ function CreateLink() {
     e.preventDefault();
 
     setError("");
+
+    if (!destinationUrl) {
+      setError("Destination URL is required");
+      return;
+    }
+
+    if (!/^https?:\/\/\S+$/.test(destinationUrl)) {
+      setError("URL must use http or https");
+      return;
+    }
+    
     setLoading(true);
 
     try {
